@@ -1,16 +1,17 @@
 import 'package:fake_twitter/twitter-api.dart';
+import 'package:fake_twitter/widgets/card-subtitle-aligned-right.dart';
 import 'package:fake_twitter/widgets/fake-app-bar.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class OwnTweetsPage extends StatefulWidget {
+  const OwnTweetsPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<OwnTweetsPage> createState() => _OwnTweetsPage();
 }
 
-class _HomePageState extends State<HomePage> {
+class _OwnTweetsPage extends State<OwnTweetsPage> {
   String? profileImage;
   String? name;
   String? userId;
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
       appBar: FakeAppBar(
           context: context,
           profileImage: profileImage,
-          name: '$name - Home',
+          name: '$name - Tweets',
           userId: userId),
       body: Visibility(
         visible: tweets.length > 0,
@@ -78,7 +79,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> getTweets() async {
-    final res = await FakeTwitterApi.instance.tweetsService.lookupHomeTimeline(
+    final res = await FakeTwitterApi.instance.tweetsService.lookupTweets(
       userId: userId!,
       expansions: [TweetExpansion.authorId],
       tweetFields: [TweetField.entities],
