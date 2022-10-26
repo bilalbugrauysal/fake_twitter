@@ -1,3 +1,4 @@
+import 'package:fake_twitter/screens/tweet-detail.dart';
 import 'package:fake_twitter/twitter-api.dart';
 import 'package:fake_twitter/widgets/fake-app-bar.dart';
 import 'package:fake_twitter/widgets/tweet-card.dart';
@@ -32,6 +33,26 @@ class _HomePageState extends State<HomePage> {
           profileImage: profileImage,
           name: '$name - Home',
           userId: userId),
+      drawer: Drawer(
+        child: ListView(children: <Widget>[
+          const DrawerHeader(
+            child: Text('Header'),
+          ),
+          ListTile(
+            title: Text('First Menu Item'),
+            onTap: () {},
+          ),
+          ListTile(
+            title: Text('Second Menu Item'),
+            onTap: () {},
+          ),
+          Divider(),
+          ListTile(
+            title: Text('About'),
+            onTap: () {},
+          ),
+        ]),
+      ),
       body: Visibility(
         visible: tweets.length > 0,
         child: RefreshIndicator(

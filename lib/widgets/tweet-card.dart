@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
+import '../screens/tweet-detail.dart';
+
 class TweetCard extends StatelessWidget {
   TweetCard({super.key, required this.tweet, required this.user});
 
@@ -14,6 +16,12 @@ class TweetCard extends StatelessWidget {
     return Card(
       child: Column(children: [
         ListTile(
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TweetDetailPage(
+                        tweetId: tweet.id,
+                      ))),
           leading: user.profileImageUrl != null
               ? CircleAvatar(
                   backgroundImage: NetworkImage(user.profileImageUrl!))
