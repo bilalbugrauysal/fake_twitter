@@ -1,5 +1,7 @@
+import 'package:fake_twitter/screens/tweet-detail.dart';
 import 'package:fake_twitter/twitter-api.dart';
 import 'package:fake_twitter/widgets/fake-app-bar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
@@ -31,6 +33,26 @@ class _HomePageState extends State<HomePage> {
           profileImage: profileImage,
           name: '$name - Home',
           userId: userId),
+      drawer: Drawer(
+        child: ListView(children: <Widget>[
+          const DrawerHeader(
+            child: Text('Header'),
+          ),
+          ListTile(
+            title: Text('First Menu Item'),
+            onTap: () {},
+          ),
+          ListTile(
+            title: Text('Second Menu Item'),
+            onTap: () {},
+          ),
+          Divider(),
+          ListTile(
+            title: Text('About'),
+            onTap: () {},
+          ),
+        ]),
+      ),
       body: Visibility(
         visible: tweets.length > 0,
         child: RefreshIndicator(
@@ -42,12 +64,14 @@ class _HomePageState extends State<HomePage> {
               final tweet = tweets![index];
               final user =
                   users.where((element) => element.id == tweet.authorId).first;
-              if (index == 0) {
-                print("tweet");
-                print(tweet);
-              }
               return Card(
                 child: ListTile(
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TweetDetailPage(
+                                tweetId: tweet.id,
+                              ))),
                   leading: user.profileImageUrl != null
                       ? CircleAvatar(
                           backgroundImage: NetworkImage(user.profileImageUrl!))
