@@ -37,26 +37,27 @@ class TweetCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            const FaIcon(FontAwesomeIcons.comment),
+            const FaIcon(FontAwesomeIcons.comment, size: 15),
             const SizedBox(width: 8),
             //Text('${tweet.id}'),
             const SizedBox(width: 8),
 
-            const FaIcon(FontAwesomeIcons.retweet),
+            const FaIcon(FontAwesomeIcons.retweet, size: 15),
             const SizedBox(width: 8),
             //Text('${tweet.id}'),
             const SizedBox(width: 8),
 
-            const FaIcon(FontAwesomeIcons.heart),
+            const FaIcon(FontAwesomeIcons.heart, size: 15),
             const SizedBox(width: 8),
             //Text('${tweet.id}'),
             const SizedBox(width: 8),
 
-            const FaIcon(FontAwesomeIcons.upload),
+            const FaIcon(FontAwesomeIcons.upload, size: 15),
             // Use Builder to get the widget context
             const SizedBox(width: 8),
           ],
         ),
+        Padding(padding: EdgeInsets.all(4)),
       ]),
     );
   }
