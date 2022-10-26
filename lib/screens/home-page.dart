@@ -1,7 +1,7 @@
 import 'package:fake_twitter/screens/tweet-detail.dart';
 import 'package:fake_twitter/twitter-api.dart';
 import 'package:fake_twitter/widgets/fake-app-bar.dart';
-import 'package:flutter/gestures.dart';
+import 'package:fake_twitter/widgets/tweet-card.dart';
 import 'package:flutter/material.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
@@ -62,26 +62,8 @@ class _HomePageState extends State<HomePage> {
             itemCount: tweets.length,
             itemBuilder: (BuildContext context, int index) {
               final tweet = tweets![index];
-              final user =
-                  users.where((element) => element.id == tweet.authorId).first;
-              return Card(
-                child: ListTile(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => TweetDetailPage(
-                                tweetId: tweet.id,
-                              ))),
-                  leading: user.profileImageUrl != null
-                      ? CircleAvatar(
-                          backgroundImage: NetworkImage(user.profileImageUrl!))
-                      : CircleAvatar(
-                          backgroundColor: Colors.grey,
-                        ),
-                  title: Text('${tweet.text}'),
-                  subtitle: Text("${user.name} - @${user.username}"),
-                ),
-              );
+              final user = users.where((e) => e.id == tweet.authorId).first;
+              return TweetCard(tweet: tweet, user: user);
             },
             // separatorBuilder: (BuildContext context, int index) =>
             //     const Divider(),
