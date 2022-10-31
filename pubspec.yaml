@@ -39,6 +39,8 @@ dependencies:
   twitter_api_v2: ^4.1.5
   meta: ^1.8.0
   font_awesome_flutter: ^10.2.1
+  intl: ^0.17.0
+  flutter_speed_dial: ^6.2.0
 
 dev_dependencies:
   flutter_test:

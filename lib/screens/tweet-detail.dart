@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:fake_twitter/twitter-api.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
 class TweetDetailPage extends StatefulWidget {
@@ -19,7 +23,7 @@ class _TweetDetailPageState extends State<TweetDetailPage> {
   @override
   void initState() {
     super.initState();
-    FakeTwitterApi.instance.tweetsService.lookupById(
+    FakeTwitterApi.instance.tweets.lookupById(
       tweetId: widget.tweetId,
       expansions: [
         // TweetExpansion.attachmentsMediaKeys,
@@ -43,7 +47,7 @@ class _TweetDetailPageState extends State<TweetDetailPage> {
         // TweetField.privateMetrics,
         // TweetField.organicMetrics,
         // TweetField.promotedMetrics,
-        // TweetField.publicMetrics,
+        TweetField.publicMetrics,
         // TweetField.possiblySensitive,
         TweetField.referencedTweets,
         TweetField.replySettings,
@@ -69,7 +73,7 @@ class _TweetDetailPageState extends State<TweetDetailPage> {
       ],
     ).then((res) => {
           setState(() {
-            print(res.toJson());
+            log(json.encode(res.toJson()));
             tweet = res.data;
             if (res.hasIncludes && res.includes != null) {
               users = res.includes!.users!;
@@ -84,14 +88,14 @@ class _TweetDetailPageState extends State<TweetDetailPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
-        title: Text("Thread"),
+        title: const Text("Thread"),
       ),
       body: Visibility(
         visible: tweet != null,
         replacement:
-            Container(child: Center(child: CircularProgressIndicator())),
+            Container(child: const Center(child: CircularProgressIndicator())),
         child: tweet != null
             ? TweetDetailCard(tweet: tweet!, users: users, key: widget.key)
             : Container(),
@@ -116,6 +120,7 @@ class _TweetDetailCardState extends State<TweetDetailCard> {
     final user = widget.users
         .where((element) => element.id == widget.tweet.authorId)
         .first;
+    final dateFormatter = DateFormat("hh:mm a - d MMM yy");
     return ListView(
       children: [
         Container(
@@ -124,7 +129,7 @@ class _TweetDetailCardState extends State<TweetDetailCard> {
                 ? CircleAvatar(
                     backgroundImage: NetworkImage(user.profileImageUrl!),
                   )
-                : CircleAvatar(
+                : const CircleAvatar(
                     backgroundColor: Colors.grey,
                   ),
             title: user.isVerified!
@@ -155,9 +160,63 @@ class _TweetDetailCardState extends State<TweetDetailCard> {
           ),
         ),
         Container(
-          child: widget.tweet.createdAt != null
-              ? Text(widget.tweet.createdAt!.toIso8601String())
-              : Text(""),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, right: 16.0, top: 8, bottom: 8),
+            child: Row(children: [
+              widget.tweet.createdAt != null
+                  ? Text(
+                      dateFormatter.format(widget.tweet.createdAt!),
+                      style: const TextStyle(color: Colors.grey),
+                    )
+                  : const Text(""),
+              const SizedBox(width: 8),
+              widget.tweet.source != null
+                  ? Text(
+                      widget.tweet.source!,
+                      style: const TextStyle(color: Colors.blue),
+                    )
+                  : const Text("")
+            ]),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          child: Divider(),
+        ),
+        Container(
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 16.0, right: 16.0, top: 8, bottom: 8),
+            child: Row(children: [
+              const SizedBox(width: 8),
+              Text(widget.tweet.publicMetrics?.replyCount.toString() ?? "0",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(width: 8),
+              const Text("comments", style: TextStyle(color: Colors.grey)),
+              const SizedBox(width: 8),
+              Text(widget.tweet.publicMetrics?.likeCount.toString() ?? "0",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const SizedBox(width: 8),
+              const Text("Likes", style: TextStyle(color: Colors.grey)),
+            ]),
+          ),
+        ),
+        const Padding(
+          padding:
+              const EdgeInsets.only(left: 16.0, right: 16.0, top: 8, bottom: 8),
+          child: Divider(),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const FaIcon(FontAwesomeIcons.comment, size: 15),
+              const FaIcon(FontAwesomeIcons.retweet, size: 15),
+              const FaIcon(FontAwesomeIcons.heart, size: 15),
+              const FaIcon(FontAwesomeIcons.shareNodes, size: 15),
+            ],
+          ),
         )
       ],
     );

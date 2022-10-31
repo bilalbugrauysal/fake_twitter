@@ -3,6 +3,7 @@ import 'package:fake_twitter/twitter-api.dart';
 import 'package:fake_twitter/widgets/fake-app-bar.dart';
 import 'package:fake_twitter/widgets/tweet-card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:twitter_api_v2/twitter_api_v2.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
           profileImage: profileImage,
           name: '$name - Home',
           userId: userId),
+      drawerEdgeDragWidth: MediaQuery.of(context).size.width,
       drawer: Drawer(
         child: ListView(children: <Widget>[
           const DrawerHeader(
@@ -52,6 +54,20 @@ class _HomePageState extends State<HomePage> {
             onTap: () {},
           ),
         ]),
+      ),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        children: [
+          SpeedDialChild(
+              onTap: () => {}, label: "Tweet", child: Icon(Icons.edit)),
+          SpeedDialChild(onTap: () => {}, label: "Gif", child: Icon(Icons.gif)),
+          SpeedDialChild(
+              onTap: () => {}, label: "Photos", child: Icon(Icons.photo)),
+          SpeedDialChild(
+              onTap: () => {},
+              label: "Spaces",
+              child: Icon(Icons.mic_external_on_sharp)),
+        ],
       ),
       body: Visibility(
         visible: tweets.length > 0,
